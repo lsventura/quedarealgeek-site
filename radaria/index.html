@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#f7f8f4">
+  <meta name="description" content="RadarIA — acompanhe preços reais, veja quando foram observados e decida com mais segurança se vale comprar ou esperar.">
+  <title>RadarIA — Antes de comprar, entenda o preço</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22%3E%3Ccircle cx=%2220%22 cy=%2220%22 r=%2215%22 fill=%22%231b4635%22/%3E%3Ccircle cx=%2220%22 cy=%2220%22 r=%225%22 fill=%22%23d4ed87%22/%3E%3C/svg%3E" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#catalogo">Ir para os produtos</a>
+  <header class="site-header">
+    <div class="wrap topbar">
+      <a class="brand" href="#inicio" aria-label="RadarIA, página inicial"><span class="brand-icon" aria-hidden="true"><i></i><i></i></span><span>radar<span class="brand-accent">ia</span><span class="brand-period">.</span></span></a>
+      <nav class="topnav" aria-label="Navegação principal">
+        <a href="#catalogo" class="nav-link active">Explorar</a>
+        <a href="#como-funciona" class="nav-link">Como avaliamos</a>
+      </nav>
+      <a class="header-action" href="#catalogo">Encontrar um produto <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero wrap" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> INTELIGÊNCIA DE PREÇOS, SEM ACHISMO</div>
+        <h1 id="heroTitle">Comprar bem começa por <em>entender o preço.</em></h1>
+        <p class="lead">Não basta parecer promoção. Veja quanto custa, quando o preço foi registrado e se já existe histórico suficiente para decidir.</p>
+        <form class="hero-search" role="search" id="heroSearch">
+          <label for="heroInput" class="sr-only">Qual produto você procura?</label>
+          <svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+          <input id="heroInput" type="search" placeholder="Busque por produto, marca ou modelo" autocomplete="off" enterkeyhint="search" maxlength="80">
+          <button type="submit">Buscar <span aria-hidden="true">↗</span></button>
+        </form>
+        <p class="hero-proof"><span class="proof-dot" aria-hidden="true"></span> <span id="sourceNote">Carregando informações verificadas…</span></p>
+      </div>
+      <div class="hero-aside" aria-label="Como funciona o RadarIA">
+        <div class="hero-aside-head"><span class="mini-seal">R<span>•</span></span><span>UMA NOVA FORMA DE DECIDIR</span><span class="aside-number">01 / 03</span></div>
+        <div class="aside-statement">Um bom preço merece <span>uma boa explicação.</span></div>
+        <div class="aside-steps">
+          <div><span class="step-no">01</span><div><strong>Preço observado</strong><small>Sem descontos inventados</small></div><span aria-hidden="true">↗</span></div>
+          <div><span class="step-no">02</span><div><strong>Histórico de verdade</strong><small>Com data e origem da coleta</small></div><span aria-hidden="true">↗</span></div>
+          <div><span class="step-no">03</span><div><strong>Você decide</strong><small>Comprar agora ou acompanhar</small></div><span aria-hidden="true">↗</span></div>
+        </div>
+        <p>O RadarIA não vende o produto. A decisão e a compra acontecem na loja.</p>
+      </div>
+    </section>
+
+    <section class="products-section" id="catalogo" aria-labelledby="catalogTitle">
+      <div class="wrap">
+        <div class="section-top">
+          <div><span class="section-kicker">SEU RADAR DE COMPRAS</span><h2 id="catalogTitle">Encontre o que faz sentido <em>para você.</em></h2><p>Produtos reais que estamos acompanhando. Sem ranking artificial de promoções.</p></div>
+          <div class="updated" id="updatedText" role="status" aria-live="polite">Conectando ao catálogo…</div>
+        </div>
+        <div class="explore-panel">
+          <div class="panel-toolbar">
+            <label class="inline-search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><span class="sr-only">Filtrar produtos</span><input id="catalogInput" type="search" placeholder="Filtrar produtos" maxlength="80"></label>
+            <label class="sort-label">Ordenar <select id="sortSelect"><option value="recent">Mais recentes</option><option value="price">Menor preço</option><option value="name">Nome A–Z</option></select></label>
+          </div>
+          <div class="category-row" id="categories" role="group" aria-label="Filtrar por categoria"><button type="button" class="category active" data-category="" aria-pressed="true">Todos</button></div>
+        </div>
+        <div class="result-top"><span id="resultCount" role="status" aria-live="polite">Carregando produtos…</span><span class="legend"><span class="legend-dot"></span> Dados coletados, não anúncios de promoção</span></div>
+        <div class="product-grid" id="productGrid" aria-live="polite"><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div></div>
+        <div class="load-more"><button id="loadMore" type="button" class="more-button" hidden>Mostrar mais produtos <span aria-hidden="true">↓</span></button></div>
+        <p class="product-disclaimer">Preços podem mudar na loja. Verifique condições, estoque e frete antes de finalizar a compra.</p>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="how wrap" aria-labelledby="howTitle">
+      <div class="how-left"><span class="section-kicker">CONFIANÇA ANTES DA COMPRA</span><h2 id="howTitle">A gente mostra o que sabe. <em>E o que ainda não sabe.</em></h2><p>É assim que o RadarIA transforma registros de preço em informação útil — sem te empurrar uma compra.</p></div>
+      <div class="principles">
+        <div><span class="principle-n">01</span><div><h3>Preço com contexto</h3><p>Mostramos o total informado pela fonte, a loja e o horário da leitura. Um preço antigo vem com aviso.</p></div></div>
+        <div><span class="principle-n">02</span><div><h3>Promoção só quando provada</h3><p>Antes de afirmar que um preço caiu, exigimos histórico observado em dias diferentes e um período mínimo de comparação.</p></div></div>
+        <div><span class="principle-n">03</span><div><h3>Sem pressão artificial</h3><p>Sem contagem regressiva falsa, sem “últimas unidades” inventadas e sem descontos baseados em preço de vitrine.</p></div></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="wrap footer-inner"><a href="#inicio" class="footer-brand">radaria<span>.</span></a><p>Preço claro. Escolhas melhores.</p><span>Beta · Dados públicos de lojas monitoradas</span></div></footer>
+
+  <dialog class="product-dialog" id="productDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-shell"><button class="dialog-close" id="closeDialog" type="button" aria-label="Fechar detalhes">×</button><div id="dialogContent"><p>Carregando análise…</p></div></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

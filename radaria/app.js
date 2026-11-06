@@ -12,7 +12,7 @@
   const maybeDate = (s) => { if(!s)return null; const d = new Date(s); return Number.isFinite(+d) ? d : null; };
   const seen = (s) => { const d=maybeDate(s); return d ? d.toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : 'sem horário'; };
   const age = (s) => { const d=maybeDate(s); if(!d) return 'Horário indisponível'; const h=Math.max(0,(Date.now()-Number(d))/3600000); return h<1?'há menos de 1h':h<24?'há '+Math.floor(h)+'h':'há '+Math.floor(h/24)+' dia(s)'; };
-  const validLink = (s) => { try{const u=new URL(s);return u.protocol==='https:'&&/(^|\.)mercadolivre\.com\.br$/i.test(u.hostname)?u.toString():'';}catch{return '';} };
+  const validLink = (s) => { try{const u=new URL(s);if(u.protocol!=='https:'||u.username||u.password)return '';if(u.hostname==='meli.la')return /^\\/[A-Za-z0-9_-]{4,100}$/.test(u.pathname)&&!u.search&&!u.hash?u.toString():'';return /(^|\\.)mercadolivre\\.com\\.br$/i.test(u.hostname)?u.toString():'';}catch{return '';} };
   const validImage = (s) => {try{const u=new URL(s);return u.protocol==='https:' && /(^|\.)(mlstatic\.com|mercadolivre\.com\.br)$/i.test(u.hostname)?u.toString():'';}catch{return '';} };
   let toastTimer;
   function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.hidden=true,3400);}
@@ -54,6 +54,12 @@
     return '<div class="visual-placeholder" aria-label="Foto não disponível"><span class="placeholder-symbol">'+esc(symbol)+'</span><small>Foto não disponível</small></div>';
   }
   function safeOffer(p){return p.offer&&Number.isFinite(Number(p.offer.total))&&Number(p.offer.total)>0?p.offer:null;}
+  function sourcePromotion(o){
+    const current=Number(o.price),before=Number(o.regular_price);
+    const valid=o.regular_price!=null&&Number.isFinite(current)&&Number.isFinite(before)&&before>current&&current>0;
+    const display=valid?'<div class="price-promo"><del>'+fmt(before)+'</del> <span>'+((1-current/before)*100).toFixed(1).replace('.',',')+'% menor neste anúncio</span></div>':'';
+    return display+'<div class="price-provenance">Menor oferta coletada entre vendedores aprovados, com frete grátis. A loja pode exibir outro vendedor ou cupom.</div>';
+  }
   function productCard(p){
     const o=safeOffer(p);if(!o)return '';
     const stale=o.is_stale||!maybeDate(o.observed_at)||Date.now()-Date.parse(o.observed_at)>4*3600000;
@@ -63,7 +69,7 @@
     return '<article class="product-card">'+
       '<div class="product-visual"><span class="visual-tag">Preço observado</span>'+imageBlock(p)+'</div>'+
       '<div class="product-body"><span class="product-category">'+esc(p.category||'Produto')+'</span><h3 class="product-name">'+esc(p.name)+'</h3>'+
-      '<div class="product-price">'+fmt(o.total)+'</div><div class="source-line"><b>'+esc(o.store||'Mercado Livre')+'</b><span>·</span><span>'+esc(age(o.observed_at))+'</span></div>'+
+      '<div class="product-price">'+fmt(o.total)+'</div>'+sourcePromotion(o)+'<div class="source-line"><b>'+esc(o.store||'Mercado Livre')+'</b><span>·</span><span>'+esc(age(o.observed_at))+'</span></div>'+
       '<div class="history-tag '+(stale?'stale':'')+'">'+label+'</div>'+
       '<div class="product-buttons"><button class="details-btn" data-details="'+esc(p.id)+'" type="button">Entender o preço</button>'+link+'</div></div></article>';
   }
@@ -132,7 +138,7 @@
       const link=url?'<a href="'+esc(url)+'" rel="noopener noreferrer nofollow sponsored" target="_blank">Conferir preço na loja ↗</a>':'';
       $('#dialogContent').innerHTML='<div class="dialog-content">'+
         '<span class="dialog-eyebrow">'+esc(p.category||'Produto')+' · PREÇO OBSERVADO</span><h2 id="dialogTitle">'+esc(p.name)+'</h2>'+
-        '<div class="dialog-main"><div class="dialog-art">'+art+'</div><div><div class="dialog-price">'+fmt(o.total)+'</div>'+
+        '<div class="dialog-main"><div class="dialog-art">'+art+'</div><div><div class="dialog-price">'+fmt(o.total)+'</div>'+sourcePromotion(o)+
         '<div class="dialog-facts"><div>Loja: <strong>'+esc(o.store||'Mercado Livre')+'</strong></div><div>Frete informado: <strong>'+fmt(o.shipping)+'</strong></div><div>Leitura: <strong>'+esc(seen(o.observed_at))+' (SP)</strong></div>'+
         (stale?'<div>⚠️ Confirme o preço atualizado antes de comprar.</div>':'')+'</div><div class="dialog-actions">'+link+'<button type="button" id="copyProduct">Compartilhar produto</button></div></div></div>'+
         '<div class="analysis-panel"><strong>'+esc(message.title)+'</strong><p>'+esc(message.body)+'</p></div>'+

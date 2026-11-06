@@ -20,3 +20,5 @@
 .price-promo del{color:#8b9691;font-weight:500}
 .price-promo span{background:#e4f5d9;border-radius:6px;padding:2px 6px}
 .price-provenance{font-size:11px;line-height:1.4;color:#73847c;margin:5px 0 7px;max-width:100%}
+
+.price-prefix{font-size:11px;line-height:1.2;font-weight:650;display:block;color:#66796c;letter-spacing:0.01em;margin-bottom:4px}

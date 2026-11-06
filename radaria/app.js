@@ -106,6 +106,35 @@
     const display=valid?'<div class="price-promo"><del>'+fmt(before)+'</del> <span>'+((1-current/before)*100).toFixed(1).replace('.',',')+'% menor neste anúncio</span></div>':'';
     return display+'<div class="price-provenance">Menor oferta coletada entre vendedores aprovados, com frete grátis. A loja pode exibir outro vendedor ou cupom.</div>';
   }
+  function groupedOffers(p){
+    const source=Array.isArray(p.offers)&&p.offers.length?p.offers:[p.offer];
+    const seenIds=new Set();
+    return source.filter(o=>{
+      if(!o||!o.verified||!Number.isFinite(Number(o.total))||Number(o.total)<=0)return false;
+      const key=String(o.id||o.seller_item_id||o.url||'');
+      if(!key||seenIds.has(key))return false;
+      seenIds.add(key);
+      return true;
+    }).sort((a,b)=>Number(a.total)-Number(b.total));
+  }
+  function offerRows(p){
+    const offers=groupedOffers(p);
+    if(!offers.length)return '';
+    return '<section class="grouped-offers" aria-label="Ofertas verificadas deste produto">'+
+      '<h3>Ofertas deste produto <span>('+num(offers.length)+')</span></h3>'+
+      '<p>Todos os preços abaixo pertencem a este produto. Condições de pagamento e cupons podem alterar o valor na loja.</p>'+
+      offers.map((offer,index)=>{
+        const link=validLink(offer.url);
+        const promo=offer.regular_price!=null&&Number(offer.regular_price)>Number(offer.price)&&Number(offer.price)>0;
+        return '<div class="grouped-offer">'+
+          '<div class="grouped-offer-main"><span class="grouped-offer-name">'+esc(offer.store||'Mercado Livre')+(index===0?' · menor oferta aprovada':'')+'</span>'+
+          '<strong>'+fmt(offer.total)+'</strong>'+
+          (promo?'<small>Antes '+fmt(offer.regular_price)+' · desconto observado nesta oferta</small>':'')+
+          '<small>Verificado '+esc(age(offer.observed_at))+'</small></div>'+
+          (link?'<a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer nofollow sponsored">Conferir oferta ↗</a>':'')+
+        '</div>';
+      }).join('')+'</section>';
+  }
   function productCard(p){
     const o=safeOffer(p);if(!o)return '';
     const stale=o.is_stale||!maybeDate(o.observed_at)||Date.now()-Date.parse(o.observed_at)>4*3600000;
@@ -187,6 +216,7 @@
         '<div class="dialog-main"><div class="dialog-art">'+art+'</div><div><div class="dialog-price"><span class="price-prefix">A partir de</span>'+fmt(o.total)+'</div>'+sourcePromotion(o)+
         '<div class="dialog-facts"><div>Loja: <strong>'+esc(o.store||'Mercado Livre')+'</strong></div><div>Frete informado: <strong>'+fmt(o.shipping)+'</strong></div><div>Leitura: <strong>'+esc(seen(o.observed_at))+' (SP)</strong></div>'+
         (stale?'<div>⚠️ Confirme o preço atualizado antes de comprar.</div>':'')+'</div><div class="dialog-actions">'+link+'<button type="button" id="copyProduct">Compartilhar produto</button></div></div></div>'+
+        offerRows(p)+
         '<div class="analysis-panel"><strong>'+esc(message.title)+'</strong><p>'+esc(message.body)+'</p></div>'+
         '<div class="chart-panel"><h3>Histórico observado</h3>'+chart(a.history||[])+'<p class="fineprint">'+num(a.readings||0)+' registros · '+num(a.history_days||0)+' dias distintos. Sem interpolação de preços não medidos.</p></div>'+
         '<p class="fineprint">O RadarIA não realiza a venda. Os preços podem mudar, e o comerciante confirma condições e disponibilidade no checkout. Links comerciais podem gerar comissão sem alterar seu preço.</p></div>';

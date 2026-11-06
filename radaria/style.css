@@ -22,3 +22,20 @@
 .price-provenance{font-size:11px;line-height:1.4;color:#73847c;margin:5px 0 7px;max-width:100%}
 
 .price-prefix{font-size:11px;line-height:1.2;font-weight:650;display:block;color:#66796c;letter-spacing:0.01em;margin-bottom:4px}
+
+/* RadarIA pipeline KPIs: accessible, responsive, shared design language. */
+.pipeline-section{background:#f3f6ef;border-top:1px solid #e6ede3;border-bottom:1px solid #e2eadd;padding:32px 0 39px}
+.pipeline-heading{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:20px}
+.pipeline-heading h2{font-family:Manrope,sans-serif;font-size:clamp(21px,2.2vw,28px);font-weight:800;letter-spacing:-1px;line-height:1.2;color:#213e2d;margin:9px 0 0}
+.pipeline-updated{color:#758578;font-size:11px;text-align:right;min-width:140px}
+.pipeline-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px}
+.pipeline-stat{background:#fff;border:1px solid #dfe9dd;border-radius:14px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.pipeline-stat>span{font-size:11px;color:#526959;font-weight:750;min-height:30px;line-height:1.35}
+.pipeline-stat>strong{font:800 clamp(23px,2.4vw,34px)/1.1 Manrope,sans-serif;letter-spacing:-1.4px;font-variant-numeric:tabular-nums;color:#183b30}
+.pipeline-stat>small{font-size:10px;color:#778779;line-height:1.5}
+.pipeline-stat-ready{background:#1b4536;border-color:#1b4536}
+.pipeline-stat-ready>span,.pipeline-stat-ready>strong{color:#f0f8e7}
+.pipeline-stat-ready>small{color:#bfdec5}
+.pipeline-footnote{color:#78887b;font-size:11px;line-height:1.6;margin:12px 0 0}
+@media(max-width:1080px){.pipeline-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.pipeline-section{padding:28px 0}.pipeline-heading{display:block}.pipeline-updated{display:block;text-align:left;margin-top:11px}.pipeline-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pipeline-stat{padding:15px 13px}.pipeline-stat:last-child{grid-column:1/-1}.pipeline-stat>span{min-height:auto}.pipeline-stat>strong{font-size:27px}}

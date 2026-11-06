@@ -12,7 +12,7 @@
   const maybeDate = (s) => { if(!s)return null; const d = new Date(s); return Number.isFinite(+d) ? d : null; };
   const seen = (s) => { const d=maybeDate(s); return d ? d.toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : 'sem horário'; };
   const age = (s) => { const d=maybeDate(s); if(!d) return 'Horário indisponível'; const h=Math.max(0,(Date.now()-Number(d))/3600000); return h<1?'há menos de 1h':h<24?'há '+Math.floor(h)+'h':'há '+Math.floor(h/24)+' dia(s)'; };
-  const validLink = (s) => { try{const u=new URL(s);if(u.protocol!=='https:'||u.username||u.password)return '';if(u.hostname==='meli.la')return /^\\/[A-Za-z0-9_-]{4,100}$/.test(u.pathname)&&!u.search&&!u.hash?u.toString():'';return /(^|\\.)mercadolivre\\.com\\.br$/i.test(u.hostname)?u.toString():'';}catch{return '';} };
+  const validLink = (s) => { try { const u=new URL(s); if(u.protocol!=='https:' || u.username || u.password) return ''; if(u.hostname==='meli.la') return /^\/[A-Za-z0-9_-]{4,100}$/.test(u.pathname) && !u.search && !u.hash ? u.toString() : ''; return /(^|\.)mercadolivre\.com\.br$/i.test(u.hostname) ? u.toString() : ''; } catch { return ''; } };
   const validImage = (s) => {try{const u=new URL(s);return u.protocol==='https:' && /(^|\.)(mlstatic\.com|mercadolivre\.com\.br)$/i.test(u.hostname)?u.toString():'';}catch{return '';} };
   let toastTimer;
   function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.hidden=true,3400);}

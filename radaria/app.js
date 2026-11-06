@@ -69,7 +69,7 @@
     return '<article class="product-card">'+
       '<div class="product-visual"><span class="visual-tag">Preço observado</span>'+imageBlock(p)+'</div>'+
       '<div class="product-body"><span class="product-category">'+esc(p.category||'Produto')+'</span><h3 class="product-name">'+esc(p.name)+'</h3>'+
-      '<div class="product-price">'+fmt(o.total)+'</div>'+sourcePromotion(o)+'<div class="source-line"><b>'+esc(o.store||'Mercado Livre')+'</b><span>·</span><span>'+esc(age(o.observed_at))+'</span></div>'+
+      '<div class="product-price"><span class="price-prefix">A partir de</span>'+fmt(o.total)+'</div>'+sourcePromotion(o)+'<div class="source-line"><b>'+esc(o.store||'Mercado Livre')+'</b><span>·</span><span>'+esc(age(o.observed_at))+'</span></div>'+
       '<div class="history-tag '+(stale?'stale':'')+'">'+label+'</div>'+
       '<div class="product-buttons"><button class="details-btn" data-details="'+esc(p.id)+'" type="button">Entender o preço</button>'+link+'</div></div></article>';
   }
@@ -138,7 +138,7 @@
       const link=url?'<a href="'+esc(url)+'" rel="noopener noreferrer nofollow sponsored" target="_blank">Conferir preço na loja ↗</a>':'';
       $('#dialogContent').innerHTML='<div class="dialog-content">'+
         '<span class="dialog-eyebrow">'+esc(p.category||'Produto')+' · PREÇO OBSERVADO</span><h2 id="dialogTitle">'+esc(p.name)+'</h2>'+
-        '<div class="dialog-main"><div class="dialog-art">'+art+'</div><div><div class="dialog-price">'+fmt(o.total)+'</div>'+sourcePromotion(o)+
+        '<div class="dialog-main"><div class="dialog-art">'+art+'</div><div><div class="dialog-price"><span class="price-prefix">A partir de</span>'+fmt(o.total)+'</div>'+sourcePromotion(o)+
         '<div class="dialog-facts"><div>Loja: <strong>'+esc(o.store||'Mercado Livre')+'</strong></div><div>Frete informado: <strong>'+fmt(o.shipping)+'</strong></div><div>Leitura: <strong>'+esc(seen(o.observed_at))+' (SP)</strong></div>'+
         (stale?'<div>⚠️ Confirme o preço atualizado antes de comprar.</div>':'')+'</div><div class="dialog-actions">'+link+'<button type="button" id="copyProduct">Compartilhar produto</button></div></div></div>'+
         '<div class="analysis-panel"><strong>'+esc(message.title)+'</strong><p>'+esc(message.body)+'</p></div>'+

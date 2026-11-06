@@ -9,7 +9,7 @@
   <title>RadarIA — Antes de comprar, entenda o preço</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22%3E%3Ccircle cx=%2220%22 cy=%2220%22 r=%2215%22 fill=%22%231b4635%22/%3E%3Ccircle cx=%2220%22 cy=%2220%22 r=%225%22 fill=%22%23d4ed87%22/%3E%3C/svg%3E" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css">
-  <script defer src="./app.js?v=20261106-radaria-fix2"></script>
+  <script defer src="./app.js?v=20261106-radaria-pipeline-v3"></script>
 </head>
 <body>
   <a class="skip" href="#catalogo">Ir para os produtos</a>
@@ -47,6 +47,23 @@
           <div><span class="step-no">03</span><div><strong>Você decide</strong><small>Comprar agora ou acompanhar</small></div><span aria-hidden="true">↗</span></div>
         </div>
         <p>O RadarIA não vende o produto. A decisão e a compra acontecem na loja.</p>
+      </div>
+    </section>
+
+    <section class="pipeline-section" id="esteira" aria-labelledby="pipelineTitle">
+      <div class="wrap">
+        <div class="pipeline-heading">
+          <div><span class="section-kicker">TRANSPARÊNCIA DA ESTEIRA</span><h2 id="pipelineTitle">Do produto descoberto à oferta publicada.</h2></div>
+          <span class="pipeline-updated" id="pipelineUpdated" role="status">Consultando números da coleta…</span>
+        </div>
+        <div class="pipeline-grid" aria-label="Indicadores atualizados da operação RadarIA">
+          <div class="pipeline-stat"><span>Produtos descobertos</span><strong id="metricDiscovered">—</strong><small>Registros encontrados entre subnichos, inclusive repetições</small></div>
+          <div class="pipeline-stat"><span>Produtos distintos</span><strong id="metricDistinct">—</strong><small>IDs de catálogo únicos, sem duplicar vendedores ou buscas</small></div>
+          <div class="pipeline-stat"><span>Distintos com foto</span><strong id="metricPhotos">—</strong><small>Produtos únicos com imagem oficial</small></div>
+          <div class="pipeline-stat"><span>Com foto e afiliado</span><strong id="metricAffiliates">—</strong><small>Interseção dos dois requisitos, sem somar duplicados</small></div>
+          <div class="pipeline-stat pipeline-stat-ready"><span>Aprovados e catalogados</span><strong id="metricApproved">—</strong><small>Ofertas validadas e disponíveis para o cliente</small></div>
+        </div>
+        <p class="pipeline-footnote">Contagens técnicas auditáveis, não estimativas de ofertas. A descoberta pode registrar o mesmo catálogo em mais de um subnicho; os demais indicadores usam produtos distintos.</p>
       </div>
     </section>
 

@@ -2,6 +2,7 @@
 (() => {
   'use strict';
   const LIVE_API = 'https://btqbgzkhnfjskpvhjhgy.supabase.co/functions/v1/radaria-catalog';
+  const METRICS_API = LIVE_API.replace('/radaria-catalog','/radaria-metrics');
   const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
   const BASE = LOCAL ? '/api' : LIVE_API;
   const state = {page:1,limit:24,q:'',category:'',sort:'recent',categories:[],count:0,nonce:0,loading:false};
@@ -37,6 +38,32 @@
       }finally{clearTimeout(deadline);}
     }
     throw lastError||new Error('API temporariamente indisponível');
+  }
+  async function loadMetrics(){
+    if(LOCAL){
+      $('#pipelineUpdated').textContent='Indicadores disponíveis na versão online';
+      return;
+    }
+    try{
+      const d=await json(METRICS_API);
+      const fields=[
+        ['metricDiscovered','discovered_records'],
+        ['metricDistinct','distinct_products'],
+        ['metricPhotos','distinct_with_photo'],
+        ['metricAffiliates','distinct_with_photo_affiliate'],
+        ['metricApproved','approved_cataloged']
+      ];
+      for(const [id,key] of fields){
+        if(!Number.isSafeInteger(d[key])||d[key]<0)throw Error('Indicador inválido: '+key);
+      }
+      if(d.distinct_with_photo>d.distinct_products ||
+         d.distinct_with_photo_affiliate>d.distinct_with_photo ||
+         d.approved_cataloged>d.distinct_products)throw Error('Contagem inconsistente');
+      for(const [id,key] of fields)$('#'+id).textContent=num(d[key]);
+      $('#pipelineUpdated').textContent='Última medição: '+seen(d.measured_at)+' (SP) · atualização automática';
+    }catch{
+      $('#pipelineUpdated').textContent='Não foi possível atualizar os números agora';
+    }
   }
   function normalized(p){
     if(!LOCAL)return p;
@@ -183,4 +210,6 @@
   $('#sortSelect').addEventListener('change',(e)=>{state.sort=e.target.value;applyFilters();});
   $('#loadMore').addEventListener('click',()=>{if(state.loading)return;state.page++;load(true);});
   load(false);
+  loadMetrics();
+  setInterval(()=>{if(!document.hidden)loadMetrics();},120000);
 })();

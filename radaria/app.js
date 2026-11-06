@@ -18,7 +18,26 @@
   function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.hidden=true,3400);}
   function delay(fn,ms){let t;return (...args)=>{clearTimeout(t);t=setTimeout(()=>fn(...args),ms);};}
   function query(params){ return Object.keys(params).filter(k=>params[k]!==''&&params[k]!=null).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&'); }
-  async function json(url){const r=await fetch(url,{headers:{Accept:'application/json'},cache:'no-store'}); if(!r.ok)throw Error('HTTP '+r.status);return r.json();}
+  async function json(url){
+    let lastError;
+    for(let attempt=0; attempt<2; attempt++){
+      const controller=new AbortController();
+      const deadline=setTimeout(()=>controller.abort(),12000);
+      try{
+        const r=await fetch(url,{headers:{Accept:'application/json'},cache:'no-store',signal:controller.signal});
+        if(!r.ok){
+          const err=new Error('HTTP '+r.status);
+          if(attempt===0 && [429,500,502,503,504].includes(r.status)){lastError=err;continue;}
+          throw err;
+        }
+        return await r.json();
+      }catch(error){
+        lastError=error;
+        if(attempt>0 || (error instanceof Error && /^HTTP /.test(error.message)))throw error;
+      }finally{clearTimeout(deadline);}
+    }
+    throw lastError||new Error('API temporariamente indisponível');
+  }
   function normalized(p){
     if(!LOCAL)return p;
     const o=p.best_offer;

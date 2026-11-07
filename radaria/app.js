@@ -50,15 +50,17 @@
         ['metricDiscovered','discovered_records'],
         ['metricDistinct','distinct_products'],
         ['metricPhotos','distinct_with_photo'],
+        ['metricCurated','distinct_with_photo_approved'],
         ['metricAffiliates','distinct_with_photo_affiliate'],
-        ['metricApproved','approved_cataloged']
+        ['metricPublished','approved_cataloged']
       ];
       for(const [id,key] of fields){
         if(!Number.isSafeInteger(d[key])||d[key]<0)throw Error('Indicador inválido: '+key);
       }
       if(d.distinct_with_photo>d.distinct_products ||
-         d.distinct_with_photo_affiliate>d.distinct_with_photo ||
-         d.approved_cataloged>d.distinct_products)throw Error('Contagem inconsistente');
+         d.distinct_with_photo_approved>d.distinct_with_photo ||
+         d.distinct_with_photo_affiliate>d.distinct_with_photo_approved ||
+         d.approved_cataloged>d.distinct_with_photo_affiliate)throw Error('Ordem do funil inconsistente');
       for(const [id,key] of fields)$('#'+id).textContent=num(d[key]);
       $('#pipelineUpdated').textContent='Última medição: '+seen(d.measured_at)+' (SP) · atualização automática';
     }catch{

@@ -120,18 +120,22 @@
   function offerRows(p){
     const offers=groupedOffers(p);
     if(!offers.length)return '';
-    return '<section class="grouped-offers" aria-label="Ofertas verificadas deste produto">'+
-      '<h3>Ofertas deste produto <span>('+num(offers.length)+')</span></h3>'+
-      '<p>Todos os preços abaixo pertencem a este produto. Condições de pagamento e cupons podem alterar o valor na loja.</p>'+
+    return '<section class="grouped-offers" aria-label="Comparação de vendedores do produto">'+
+      '<h3>Compare vendedores <span>('+num(offers.length)+' preços)</span></h3>'+
+      '<p>Um único produto, várias cotações auditadas. Somente ofertas com link próprio verificado têm botão de compra; outras servem para comparação e podem variar na loja.</p>'+
       offers.map((offer,index)=>{
         const link=validLink(offer.url);
-        const promo=offer.regular_price!=null&&Number(offer.regular_price)>Number(offer.price)&&Number(offer.price)>0;
-        return '<div class="grouped-offer">'+
-          '<div class="grouped-offer-main"><span class="grouped-offer-name">'+esc(offer.store||'Mercado Livre')+(index===0?' · menor oferta aprovada':'')+'</span>'+
+        const quote=offer.quote_only===true;
+        const promo=!quote&&offer.regular_price!=null&&Number(offer.regular_price)>Number(offer.price)&&Number(offer.price)>0;
+        const note=quote?'Cotação de vendedor auditado · sem link exclusivo confirmado':'Link de afiliado verificado para a oferta';
+        return '<div class="grouped-offer'+(quote?' quote-only':'')+'">'+
+          '<div class="grouped-offer-main"><span class="grouped-offer-name">'+esc(offer.store||'Mercado Livre')+(index===0?' · menor preço observado':'')+'</span>'+
           '<strong>'+fmt(offer.total)+'</strong>'+
-          (promo?'<small>Antes '+fmt(offer.regular_price)+' · desconto observado nesta oferta</small>':'')+
-          '<small>Verificado '+esc(age(offer.observed_at))+'</small></div>'+
-          (link?'<a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer nofollow sponsored">Conferir oferta ↗</a>':'')+
+          (promo?'<small>Antes '+fmt(offer.regular_price)+' · desconto verificado nesta oferta</small>':'')+
+          '<small>'+esc(note)+'</small>'+
+          '<small>Observado '+esc(age(offer.observed_at))+'</small></div>'+
+          (link&&!quote?'<a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer nofollow sponsored">Ver oferta ↗</a>':
+          '<span class="grouped-quote-label">Comparar preço</span>')+
         '</div>';
       }).join('')+'</section>';
   }
